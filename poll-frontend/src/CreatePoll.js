@@ -8,6 +8,7 @@ import {
   from 'mdb-react-ui-kit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 function CreatePoll() {
   const [defaultChoices, setDefaultChoices] = useState(['','','']);
@@ -52,13 +53,32 @@ function CreatePoll() {
       return;
     }
     //
-    const formData = new FormData();
-    formData.append('pollQuestion', defaultChoices[0]);
-    formData.append('choice1', defaultChoices[1])
-    formData.append('choice2', defaultChoices[2])
-    choices.map((value, index)=>{
-      formData.append(`optionalChoice${index}`, value);
-      return value;
+    // const formData = new FormData();
+    // formData.append('pollQuestion', defaultChoices[0]);
+    // formData.append('choice1', defaultChoices[1])
+    // formData.append('choice2', defaultChoices[2])
+    // choices.map((value, index)=>{
+    //   formData.append(`optionalChoice${index}`, value);
+    //   return value;
+    // })
+    const options = [];
+    options.push({"option":defaultChoices[1], "totalVotes":"0"});
+    options.push({"option":defaultChoices[2], "totalVotes":"0"});
+    choices.forEach(choice =>{
+      options.push({"option":choice, "totalVotes":"0"});
+    })
+    const requestBody = {
+      "pollQuestion":defaultChoices[0],
+      "pollOptions":options,
+      "expirationDateTime":"60",
+      "isActive":false,
+      "totalVotes":0
+    }
+    console.log('requesBody: ', requestBody);
+    axios.post('http://localhost:8080/api/poll/cratePoll',requestBody)
+    .then(res=>res.data)
+    .then(data=>{
+      console.log(data);
     })
     // call endpoint
   }
