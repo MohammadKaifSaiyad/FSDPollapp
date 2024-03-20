@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import {
     MDBBtn,
     MDBContainer,
@@ -13,6 +14,7 @@ import axios from 'axios';
 function CreatePoll() {
   const [defaultChoices, setDefaultChoices] = useState(['','','']);
   const [choices, setChoices] = useState([]);
+  const navigate = useNavigate();
 
   const handleAddChoice = () => {
     setChoices([...choices, '']);
@@ -79,6 +81,7 @@ function CreatePoll() {
     .then(res=>res.data)
     .then(data=>{
       console.log(data);
+      navigate();
     })
     // call endpoint
   }
